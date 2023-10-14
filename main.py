@@ -21,11 +21,15 @@ publish = True
 ##### FUNCTIONS #####
 
 def text_encoder(text):
-    'the most well written docstring'
+    '''the most well written docstring'''
+
     text_encoded = []
     for t in text:
         if t == ' ': t_encoded = 'space'
         elif t == '&': t_encoded = 'heart'
+        elif t == '.': t_encoded = 'dot'
+        elif t == '$': t_encoded = 'dollar'
+        elif t == ':': t_encoded = 'doubledot'
         else:
             t_encoded = 'upp_' if t.isupper() else 'low_'
             t_encoded += t.upper()
@@ -46,7 +50,7 @@ def text_encoder(text):
 
 
 def print_message(array):
-    'the second most well written docstring'
+    '''the second most well written docstring'''
 
     print('\nThanks for using amazing graph. We love you.')
     print('Here is a preview of what you should see in git :\n')
@@ -95,7 +99,7 @@ if publish:
         days.append(date.strftime('%Y.%m.%d'))
 
     # commits = message_filled*(np.random.rand(7,53)*3+11).astype('int')
-    commits = (message_filled*15).astype('int')
+    commits = (message_filled*25).astype('int')
 
     print('\nMaking commits : ')
     for n in tqdm(range(len(message_flat))):
