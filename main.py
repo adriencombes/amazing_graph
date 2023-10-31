@@ -3,9 +3,7 @@
 from datetime import datetime, timedelta
 import numpy as np
 import os
-import pandas as pd
 import pytz
-import plotly.express as px
 import random
 import shutil
 import sys
@@ -16,7 +14,7 @@ from alphabet import alphabet
 ##### VARIABLES #####
 
 text = sys.argv[1]
-publish = True
+publish = sys.argv[2]
 
 ##### FUNCTIONS #####
 
@@ -30,6 +28,8 @@ def text_encoder(text):
         elif t == '.': t_encoded = 'dot'
         elif t == '$': t_encoded = 'dollar'
         elif t == ':': t_encoded = 'doubledot'
+        elif t == '^': t_encoded = 'creeper'
+        elif t == '!': t_encoded = 'exclamation'
         else:
             t_encoded = 'upp_' if t.isupper() else 'low_'
             t_encoded += t.upper()
@@ -42,7 +42,13 @@ def text_encoder(text):
 
     if message.shape[1] < 53:
         rows_to_fill = 53 - message.shape[1]
-        message_filled = np.concatenate((message,np.zeros((7,rows_to_fill),dtype='int')),axis=1)
+        rows_to_fill_l = (53 - message.shape[1]) // 2
+        rows_to_fill_r = rows_to_fill - rows_to_fill_l
+        message_filled = np.concatenate((
+            np.zeros((7,rows_to_fill_l),dtype='int'),
+            message,
+            np.zeros((7,rows_to_fill_r),dtype='int')
+            ),axis=1)
     else :
         message_filled = message[:,:53]
 
@@ -70,11 +76,9 @@ message_filled = text_encoder(text)
 message_flat = list(message_filled.reshape(1,371,order='F')[0])
 print_message(message_filled)
 
-publish = True
-
 if publish:
 
-    os.system('gh repo delete --confirm dont_name_me_like_that')
+    os.system('gh repo delete --yes dont_name_me_like_that')
     shutil.copytree(os.path.join('..','amazing_graph'),os.path.join('..','dont_name_me_like_that'))
     os.chdir(os.path.join('..','dont_name_me_like_that'))
     shutil.rmtree('.git')
